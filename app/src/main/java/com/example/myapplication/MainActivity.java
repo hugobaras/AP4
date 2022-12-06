@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
 
         connect = findViewById(R.id.connect);
 
-
             }
 
 }
