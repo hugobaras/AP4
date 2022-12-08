@@ -88,6 +88,7 @@
         android:textColor="@color/black2"
         android:textColorHint="#795548"
         android:textSize="12sp"
+        android:drawableLeft="@drawable/ic_baseline_dialpad_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintStart_toStartOf="parent"
