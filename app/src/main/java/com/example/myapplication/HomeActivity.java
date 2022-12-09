@@ -1,10 +1,7 @@
 package com.example.myapplication;
 
 import android.app.AlertDialog;
-import android.content.Intent;
 import android.os.Bundle;
-import android.service.controls.actions.FloatAction;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -12,8 +9,6 @@ import androidx.activity.result.ActivityResultLauncher;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -26,9 +21,7 @@ import org.json.JSONObject;
 
 public class HomeActivity extends MainActivity {
 
-    private FloatingActionButton scan;
     private TextView myResult;
-    private Button buttonTest;
     private RequestQueue Queue;
 
     @Override
@@ -38,28 +31,20 @@ public class HomeActivity extends MainActivity {
         setContentView(R.layout.activity_home);
         Queue = Volley.newRequestQueue(this);
         myResult = findViewById(R.id.textTest);
-        buttonTest = findViewById(R.id.buttonTest);
+        Button buttonTest = findViewById(R.id.buttonTest);
 
-        scan = findViewById(R.id.scan);
+        FloatingActionButton scan = findViewById(R.id.scan);
         scan.setOnClickListener(v ->
-        {
-            scanCode();
-        });
-        buttonTest.setOnClickListener(view -> {
-            getRequest();
-        });
+                scanCode());
+        buttonTest.setOnClickListener(view -> getRequest());
     }
 
     protected void scanCode() {
         ScanOptions options = new ScanOptions();
-        options.setPrompt("Volume haut pour scanner");
         options.setBeepEnabled(true);
         options.setOrientationLocked(true);
         options.setCaptureActivity(CaptureAct.class);
         barLauncher.launch(options);
-        AlertDialog.Builder buil = new AlertDialog.Builder(getApplicationContext());
-        buil.setTitle("Quitter");
-        buil.setNegativeButton("Ok", (dialog, i) -> dialog.dismiss()).show();
     }
 
     ActivityResultLauncher<ScanOptions> barLauncher = registerForActivityResult(new ScanContract(), result -> {
@@ -76,35 +61,27 @@ public class HomeActivity extends MainActivity {
     }
 
     private void getRequest() {
-        String url = "https://raw.githubusercontent.com/Jaeger47/UNITY_JSON/main/student_data.json";
+        String url = "https://raw.githubusercontent.com/hugobaras/AP4/master/test.json";
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            JSONArray jsonArray = response.getJSONArray("students");
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject student = jsonArray.getJSONObject(i);
+                response -> {
+                    try {
+                        JSONArray jsonArray = response.getJSONArray("articles");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject articles = jsonArray.getJSONObject(i);
 
-                                String myName = student.getString("name");
-                                int myAge = student.getInt("age");
-                                String myEmail = student.getString("email");
-                                Boolean myIsEnrolled = student.getBoolean("isEnrolled");
+                            String nom = articles.getString("nom");
+                            int id = articles.getInt("id");
+                            String image = articles.getString("image");
+                            String prix = articles.getString("prix");
 
 
-                                myResult.append(myName + ", " + String.valueOf(myAge) + ", " + myEmail + ", " + myIsEnrolled + "\n\n");
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                            myResult.append(nom + ", " + id + ", " + image + ", " + prix + "\n\n");
                         }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        });
+                }, Throwable::printStackTrace);
 
         Queue.add(request);
     }
