@@ -1,22 +1,6 @@
 {
-    "articles": [
-        {
-            "nom": "t-shirt",
-            "id": "123",
-            "image": "image1.jpg",
-            "prix": "80"
-        },
-            {
-                "nom": "chaussure",
-                "id": "456",
-                "image": "image2.jpg",
-                "prix": "120"
-            },
-                {
-                    "nom": "haltere",
-                    "id": "789",
-                    "image": "image3.jpg",
-                    "prix": "150"
-                }
-    ]
+    "nom": "t-shirt",
+    "id": "123",
+    "image": "image1.jpg",
+    "prix": "80"
 }
