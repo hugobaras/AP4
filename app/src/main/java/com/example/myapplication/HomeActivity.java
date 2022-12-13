@@ -1,42 +1,63 @@
 package com.example.myapplication;
 
-import android.app.AlertDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class HomeActivity extends MainActivity {
 
-    private TextView myResult;
-    private RequestQueue Queue;
+    TextView result;
+    EditText article;
+    private ActivityResultLauncher<ScanOptions> barLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        Queue = Volley.newRequestQueue(this);
-        myResult = findViewById(R.id.textTest);
         Button buttonTest = findViewById(R.id.buttonTest);
 
         FloatingActionButton scan = findViewById(R.id.scan);
         scan.setOnClickListener(v ->
                 scanCode());
         buttonTest.setOnClickListener(view -> getRequest());
+        barLauncher = registerForActivityResult(new ScanContract(), result -> {
+            if (result.getContents() != null) {
+                String url = result.getContents();
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+            }
+        });
     }
 
     protected void scanCode() {
@@ -47,43 +68,72 @@ public class HomeActivity extends MainActivity {
         barLauncher.launch(options);
     }
 
-    ActivityResultLauncher<ScanOptions> barLauncher = registerForActivityResult(new ScanContract(), result -> {
-        if (result.getContents() != null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
-            builder.setTitle("Resultat");
-            builder.setMessage(result.getContents());
-            builder.setPositiveButton("Ok", (dialog, i) -> dialog.dismiss()).show();
-        }
-    });
-
-    public void getJSON() {
-        getRequest();
-    }
-
     private void getRequest() {
-        String url = "https://raw.githubusercontent.com/hugobaras/AP4/master/test.json";
+        article = findViewById(R.id.editTextArticle);
+        String idArticle = article.getText().toString();
+        result = findViewById(R.id.textTest);
+        // Créer une file d'attente de requêtes Volley
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
-                response -> {
-                    try {
-                        JSONArray jsonArray = response.getJSONArray("articles");
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject articles = jsonArray.getJSONObject(i);
+// Créer la requête JSON
+  /*      String url = "http://172.16.107.28/SLAM/AP3/AP3/API/getArticle.php";
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            // Récupérer les données de la réponse
+                            String nom = response.getString("pr_nom");
+                            String description = response.getString("pr_description");
+                            int stock = response.getInt("pr_stockInternet");
+                            String lieu = response.getString("ma_lieu");
 
-                            String nom = articles.getString("nom");
-                            int id = articles.getInt("id");
-                            String image = articles.getString("image");
-                            String prix = articles.getString("prix");
+                            result.append(nom + description + stock + lieu);
 
-
-                            myResult.append(nom + ", " + id + ", " + image + ", " + prix + "\n\n");
+                            // Traiter les données
+                            // ...
+                        } catch (JSONException e) {
+                            // Gérer les erreurs d'analyse de la réponse JSON
+                            // ...
                         }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     }
-                }, Throwable::printStackTrace);
+                },*/
+                String url = "https://raw.githubusercontent.com/hugobaras/AP4/master/article.json";
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            // Récupérer les données de la réponse
+                            String nom = response.getString("nom");
+                            int id = response.getInt("id");
+                            String image = response.getString("image");
+                            int prix = response.getInt("prix");
 
-        Queue.add(request);
+                            result.append(nom + id + nom + prix);
+
+                            // Traiter les données
+                            // ...
+                        } catch (JSONException e) {
+                            // Gérer les erreurs d'analyse de la réponse JSON
+                            // ...
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Gérer les erreurs
+                        // ...
+                    }
+                }
+        );
+
+// Ajouter la requête à la file d'attente
+        queue.add(request);
+
     }
 
 }

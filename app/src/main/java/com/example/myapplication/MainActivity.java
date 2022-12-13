@@ -25,9 +25,7 @@ public class MainActivity extends AppCompatActivity {
         connect = findViewById(R.id.connect);
         login = findViewById(R.id.editTextLogin);
         password = findViewById(R.id.editTextPassword);
-        connect.setOnClickListener(new View.OnClickListener(){
-
-
+        connect.setOnClickListener(new View.OnClickListener() {
 
 
             @Override
@@ -36,20 +34,18 @@ public class MainActivity extends AppCompatActivity {
                 final String login_entry = login.getText().toString();
                 final String pwd_entry = password.getText().toString();
 
-                if(login_entry.equals("test") && pwd_entry.equals("pwd")) {
+                if (login_entry.equals("test") && pwd_entry.equals("pwd")) {
 
-                    Intent Home= new Intent(MainActivity.this, HomeActivity.class);
+                    Intent Home = new Intent(MainActivity.this, HomeActivity.class);
                     startActivity(Home);
                     finish();
 
-                }
-                else
-                {
+                } else {
                     Toast.makeText(getApplicationContext(), "Identifiant ou mot de passe incorrect", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-            }
+    }
 
 }
