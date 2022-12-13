@@ -3,16 +3,19 @@ package com.example.myapplication;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -32,6 +35,8 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 public class HomeActivity extends MainActivity {
 
@@ -76,7 +81,8 @@ public class HomeActivity extends MainActivity {
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
 
 // Créer la requête JSON
-  /*      String url = "http://172.16.107.28/SLAM/AP3/AP3/API/getArticle.php";
+        VolleyLog.DEBUG = true;;
+       String url = "http://172.16.107.28/SLAM/AP3/AP3/API/getArticle.php";
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
@@ -94,12 +100,13 @@ public class HomeActivity extends MainActivity {
                             // Traiter les données
                             // ...
                         } catch (JSONException e) {
+                            Log.v("Erreur", "erreur test");
                             // Gérer les erreurs d'analyse de la réponse JSON
                             // ...
                         }
                     }
-                },*/
-                String url = "https://raw.githubusercontent.com/hugobaras/AP4/master/article.json";
+                },
+               /* String url = "https://raw.githubusercontent.com/hugobaras/AP4/master/article.json";
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
@@ -121,15 +128,25 @@ public class HomeActivity extends MainActivity {
                             // ...
                         }
                     }
-                },
+                },*/
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // Gérer les erreurs
+                        Log.v("Erreur2", "Error Response");
                         // ...
                     }
+
                 }
-        );
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("CUSTOM_HEADER", "Yahoo");
+                headers.put("ANOTHER_CUSTOM_HEADER", "Google");
+                return headers;
+            }
+        };
 
 // Ajouter la requête à la file d'attente
         queue.add(request);
