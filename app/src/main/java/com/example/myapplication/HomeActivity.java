@@ -82,7 +82,7 @@ public class HomeActivity extends MainActivity {
 
 // Créer la requête JSON
         VolleyLog.DEBUG = true;;
-       String url = "http://172.16.107.28/SLAM/AP3/AP3/API/getArticle.php";
+       String url = "http://172.16.107.28/SLAM/AP3/AP3/API/getArticle.php?id=" + idArticle + "";
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
@@ -95,7 +95,7 @@ public class HomeActivity extends MainActivity {
                             int stock = response.getInt("pr_stockInternet");
                             String lieu = response.getString("ma_lieu");
 
-                            result.append(nom + description + stock + lieu);
+                            result.append(nom+ " " + description + " " + stock + " " + lieu);
 
                             // Traiter les données
                             // ...
@@ -106,29 +106,6 @@ public class HomeActivity extends MainActivity {
                         }
                     }
                 },
-               /* String url = "https://raw.githubusercontent.com/hugobaras/AP4/master/article.json";
-        JsonObjectRequest request = new JsonObjectRequest(
-                Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            // Récupérer les données de la réponse
-                            String nom = response.getString("nom");
-                            int id = response.getInt("id");
-                            String image = response.getString("image");
-                            int prix = response.getInt("prix");
-
-                            result.append(nom + id + nom + prix);
-
-                            // Traiter les données
-                            // ...
-                        } catch (JSONException e) {
-                            // Gérer les erreurs d'analyse de la réponse JSON
-                            // ...
-                        }
-                    }
-                },*/
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
