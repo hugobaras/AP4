@@ -1,7 +1,5 @@
 package com.example.myapplication;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -14,10 +12,8 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.journeyapps.barcodescanner.ScanContract;
@@ -25,16 +21,7 @@ import com.journeyapps.barcodescanner.ScanOptions;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,6 +29,7 @@ public class HomeActivity extends MainActivity {
 
     TextView result;
     EditText article;
+    String ArticleTest;
     private ActivityResultLauncher<ScanOptions> barLauncher;
 
     @Override
@@ -57,10 +45,8 @@ public class HomeActivity extends MainActivity {
         buttonTest.setOnClickListener(view -> getRequest());
         barLauncher = registerForActivityResult(new ScanContract(), result -> {
             if (result.getContents() != null) {
-                String url = result.getContents();
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(url));
-                startActivity(i);
+                ArticleTest = result.getContents();
+                Log.v("Test", ArticleTest);
             }
         });
     }
@@ -81,8 +67,8 @@ public class HomeActivity extends MainActivity {
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
 
 // Créer la requête JSON
-        VolleyLog.DEBUG = true;;
-       String url = "http://172.16.107.28/SLAM/AP3/AP3/API/getArticle.php?id=" + idArticle + "";
+        VolleyLog.DEBUG = true;
+       String url = "http://172.16.107.28/SLAM/AP3/AP3/API/getArticle.php?id=" + ArticleTest + "";
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
@@ -95,7 +81,7 @@ public class HomeActivity extends MainActivity {
                             int stock = response.getInt("pr_stockInternet");
                             String lieu = response.getString("ma_lieu");
 
-                            result.append(nom+ " " + description + " " + stock + " " + lieu);
+                            result.append(nom+ " " + description + " " + stock + " " + lieu + "\n");
 
                             // Traiter les données
                             // ...
@@ -106,14 +92,10 @@ public class HomeActivity extends MainActivity {
                         }
                     }
                 },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // Gérer les erreurs
-                        Log.v("Erreur2", "Error Response");
-                        // ...
-                    }
-
+                error -> {
+                    // Gérer les erreurs
+                    Log.v("Erreur2", "Error Response");
+                    // ...
                 }
         ) {
             @Override
