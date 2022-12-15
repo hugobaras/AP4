@@ -21,6 +21,7 @@ import com.journeyapps.barcodescanner.ScanOptions;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,15 +39,15 @@ public class HomeActivity extends MainActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         Button buttonTest = findViewById(R.id.buttonTest);
-
         FloatingActionButton scan = findViewById(R.id.scan);
         scan.setOnClickListener(v ->
                 scanCode());
-        buttonTest.setOnClickListener(view -> getRequest());
         barLauncher = registerForActivityResult(new ScanContract(), result -> {
             if (result.getContents() != null) {
                 ArticleTest = result.getContents();
                 Log.v("Test", ArticleTest);
+                getRequest(ArticleTest);
+
             }
         });
     }
@@ -59,7 +60,7 @@ public class HomeActivity extends MainActivity {
         barLauncher.launch(options);
     }
 
-    private void getRequest() {
+    private void getRequest(String ArticleTest) {
         article = findViewById(R.id.editTextArticle);
         String idArticle = article.getText().toString();
         result = findViewById(R.id.textTest);
@@ -68,7 +69,7 @@ public class HomeActivity extends MainActivity {
 
 // Créer la requête JSON
         VolleyLog.DEBUG = true;
-       String url = "http://172.16.107.28/SLAM/AP3/AP3/API/getArticle.php?id=" + ArticleTest + "";
+       String url = "http://172.16.106.19/SLAM/AP3/AP3/API/getArticle.php?id=" + ArticleTest + "";
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
@@ -82,7 +83,7 @@ public class HomeActivity extends MainActivity {
                             String lieu = response.getString("ma_lieu");
 
                             result.append(nom+ " " + description + " " + stock + " " + lieu + "\n");
-
+                            Log.v("nouveau test", nom+ " " + description + " " + stock + " " + lieu + "\n");
                             // Traiter les données
                             // ...
                         } catch (JSONException e) {
