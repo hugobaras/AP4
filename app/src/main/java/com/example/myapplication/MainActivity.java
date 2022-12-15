@@ -30,6 +30,10 @@ public class MainActivity extends AppCompatActivity {
     private EditText password;
     private RequestQueue Queue;
 
+    private int id;
+    private String nom;
+    private String prenom;
+    private String adresse;
     private String mail;
 
 
@@ -58,14 +62,25 @@ public class MainActivity extends AppCompatActivity {
                         response -> {
                             try {
 
+                                //recuperation des parametre de connexion de l'API
+                                id = response.getInt("cl_id");
+                                nom = response.getString("cl_nom");
+                                prenom = response.getString("cl_prenom");
+                                adresse = response.getString("cl_adresse");
                                 mail = response.getString("cl_email");
-                                Log.v("Test", mail);
+
+
+                                //Utilisation des infos pour creer un utilisateur
+                                CurrentUser user = new CurrentUser(id, nom, prenom, adresse, mail);
+
+
                                 if(mail != "false") {
                                     Intent Home= new Intent(MainActivity.this, HomeActivity.class);
                                     startActivity(Home);
                                     finish();
                                 }
                                 else {
+                                    //Toast = pop up
                                     Toast.makeText(getApplicationContext(), "Identifiant ou mot de passe incorrect", Toast.LENGTH_SHORT).show();
                                 }
 
