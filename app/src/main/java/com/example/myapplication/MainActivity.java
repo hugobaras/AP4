@@ -62,21 +62,23 @@ public class MainActivity extends AppCompatActivity {
                         response -> {
                             try {
 
-                                //recuperation des parametre de connexion de l'API
-                                id = response.getInt("cl_id");
-                                nom = response.getString("cl_nom");
-                                prenom = response.getString("cl_prenom");
-                                adresse = response.getString("cl_adresse");
+                                //recuperation du mail de connexion de l'API
                                 mail = response.getString("cl_email");
-
-
-                                //Utilisation des infos pour creer un utilisateur
-                                CurrentUser user = new CurrentUser(id, nom, prenom, adresse, mail);
 
 
                                 if(mail != "false") {
                                     Intent Home= new Intent(MainActivity.this, HomeActivity.class);
                                     startActivity(Home);
+
+                                    //recuperation des parametre de connexion de l'API
+                                    id = response.getInt("cl_id");
+                                    nom = response.getString("cl_nom");
+                                    prenom = response.getString("cl_prenom");
+                                    adresse = response.getString("cl_adresse");
+
+                                    //Utilisation des infos pour creer un utilisateur
+                                    CurrentUser user = new CurrentUser(id, nom, prenom, adresse, mail);
+
                                     finish();
                                 }
                                 else {
