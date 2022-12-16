@@ -16,6 +16,24 @@ public class CurrentUser {
         this.mail = mail;
     }
 
+    public int getId() {
+        return id;
+    }
 
+    public String getNom() {
+        return nom;
+    }
+
+    public String getPrenom() {
+        return prenom;
+    }
+
+    public String getAdresse() {
+        return adresse;
+    }
+
+    public String getMail() {
+        return mail;
+    }
 
 }
