@@ -1,42 +1,55 @@
 package com.example.myapplication;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class HomeActivity extends MainActivity {
 
-    private TextView myResult;
-    private RequestQueue Queue;
+    TextView result;
+    EditText article;
+    String ArticleTest;
+    private ActivityResultLauncher<ScanOptions> barLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        Queue = Volley.newRequestQueue(this);
-        myResult = findViewById(R.id.textTest);
         Button buttonTest = findViewById(R.id.buttonTest);
-
         FloatingActionButton scan = findViewById(R.id.scan);
         scan.setOnClickListener(v ->
                 scanCode());
-        buttonTest.setOnClickListener(view -> getRequest());
+        barLauncher = registerForActivityResult(new ScanContract(), result -> {
+            if (result.getContents() != null) {
+                ArticleTest = result.getContents();
+                Log.v("Test", ArticleTest);
+                getRequest(ArticleTest);
+
+            }
+        });
     }
 
     protected void scanCode() {
@@ -47,43 +60,57 @@ public class HomeActivity extends MainActivity {
         barLauncher.launch(options);
     }
 
-    ActivityResultLauncher<ScanOptions> barLauncher = registerForActivityResult(new ScanContract(), result -> {
-        if (result.getContents() != null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
-            builder.setTitle("Resultat");
-            builder.setMessage(result.getContents());
-            builder.setPositiveButton("Ok", (dialog, i) -> dialog.dismiss()).show();
-        }
-    });
+    private void getRequest(String ArticleTest) {
+        article = findViewById(R.id.editTextArticle);
+        String idArticle = article.getText().toString();
+        result = findViewById(R.id.textTest);
+        // Créer une file d'attente de requêtes Volley
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
 
-    public void getJSON() {
-        getRequest();
-    }
+// Créer la requête JSON
+        VolleyLog.DEBUG = true;
+       String url = "http://172.16.106.19/SLAM/AP3/AP3/API/getArticle.php?id=" + ArticleTest + "";
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            // Récupérer les données de la réponse
+                            String nom = response.getString("pr_nom");
+                            String description = response.getString("pr_description");
+                            int stock = response.getInt("pr_stockInternet");
+                            String lieu = response.getString("ma_lieu");
 
-    private void getRequest() {
-        String url = "https://raw.githubusercontent.com/hugobaras/AP4/master/test.json";
-
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
-                response -> {
-                    try {
-                        JSONArray jsonArray = response.getJSONArray("articles");
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject articles = jsonArray.getJSONObject(i);
-
-                            String nom = articles.getString("nom");
-                            int id = articles.getInt("id");
-                            String image = articles.getString("image");
-                            String prix = articles.getString("prix");
-
-
-                            myResult.append(nom + ", " + id + ", " + image + ", " + prix + "\n\n");
+                            result.append(nom+ " " + description + " " + stock + " " + lieu + "\n");
+                            Log.v("nouveau test", nom+ " " + description + " " + stock + " " + lieu + "\n");
+                            // Traiter les données
+                            // ...
+                        } catch (JSONException e) {
+                            Log.v("Erreur", "erreur test");
+                            // Gérer les erreurs d'analyse de la réponse JSON
+                            // ...
                         }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     }
-                }, Throwable::printStackTrace);
+                },
+                error -> {
+                    // Gérer les erreurs
+                    Log.v("Erreur2", "Error Response");
+                    // ...
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("CUSTOM_HEADER", "Yahoo");
+                headers.put("ANOTHER_CUSTOM_HEADER", "Google");
+                return headers;
+            }
+        };
 
-        Queue.add(request);
+// Ajouter la requête à la file d'attente
+        queue.add(request);
+
     }
 
 }

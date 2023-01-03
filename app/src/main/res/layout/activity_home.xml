@@ -23,12 +23,12 @@
 
     <TextView
         android:id="@+id/textTest"
-        android:layout_width="225dp"
-        android:layout_height="430dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="237dp"
+        android:layout_height="239dp"
+        android:layout_marginTop="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextArticle" />
 
     <Button
         android:id="@+id/buttonTest"
@@ -40,4 +40,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textTest"
         tools:ignore="TextContrastCheck" />
+
+    <EditText
+        android:id="@+id/editTextArticle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Article ID"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
