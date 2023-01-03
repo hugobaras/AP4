@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
                                     //Utilisation des infos pour creer un utilisateur
                                     CurrentUser user = new CurrentUser(id, nom, prenom, adresse, mail);
 
+                                    Log.v("Connexion", nom + prenom + adresse + id);
                                     finish();
                                 }
                                 else {

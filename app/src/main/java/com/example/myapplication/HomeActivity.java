@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -31,6 +32,7 @@ public class HomeActivity extends MainActivity {
     TextView result;
     EditText article;
     String ArticleTest;
+    ImageView imageView;
     private ActivityResultLauncher<ScanOptions> barLauncher;
 
     @Override
@@ -64,6 +66,7 @@ public class HomeActivity extends MainActivity {
         article = findViewById(R.id.editTextArticle);
         String idArticle = article.getText().toString();
         result = findViewById(R.id.textTest);
+        imageView = findViewById(R.id.imageView);
         // Créer une file d'attente de requêtes Volley
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
 
@@ -77,6 +80,7 @@ public class HomeActivity extends MainActivity {
                     public void onResponse(JSONObject response) {
                         try {
                             // Récupérer les données de la réponse
+
                             String nom = response.getString("pr_nom");
                             String description = response.getString("pr_description");
                             int stock = response.getInt("pr_stockInternet");
