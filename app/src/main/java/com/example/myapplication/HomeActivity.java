@@ -31,7 +31,9 @@ import java.util.Map;
 
 public class HomeActivity extends MainActivity {
 
-    TextView result;
+    TextView titre;
+    TextView desc;
+    TextView slView;
     EditText article;
     String ArticleTest;
     ImageView imageView;
@@ -76,14 +78,16 @@ public class HomeActivity extends MainActivity {
     private void getRequest(String ArticleTest) {
         article = findViewById(R.id.editTextArticle);
         String idArticle = article.getText().toString();
-        result = findViewById(R.id.textTest);
+        titre = findViewById(R.id.titreArticle);
+        desc = findViewById(R.id.descriptionArticle);
+        slView = findViewById(R.id.stockArticle);
         imageView = findViewById(R.id.imageView);
         // Créer une file d'attente de requêtes Volley
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
 
 // Créer la requête JSON
         VolleyLog.DEBUG = true;
-       String url = "http://172.16.107.43/SLAM/AP3/AP3/API/getArticle.php?id=" + ArticleTest + "";
+        String url = "http://172.16.107.43/SLAM/AP3/AP3/API/getArticle.php?id=" + ArticleTest + "";
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
@@ -97,7 +101,9 @@ public class HomeActivity extends MainActivity {
                             int stock = response.getInt("pr_stockInternet");
                             String lieu = response.getString("ma_lieu");
 
-                            result.append(nom+ " " + description + " " + stock + " " + lieu + "\n");
+                            titre.append(nom + "\n");
+                            desc.append(description + "\n");
+                            slView.append(stock + " " + lieu + "\n");
                             Log.v("nouveau test", nom+ " " + description + " " + stock + " " + lieu + "\n");
                             // Traiter les données
                             // ...

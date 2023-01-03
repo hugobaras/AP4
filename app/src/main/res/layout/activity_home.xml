@@ -23,12 +23,14 @@
         app:srcCompat="@drawable/scanner" />
 
     <TextView
-        android:id="@+id/textTest"
-        android:layout_width="237dp"
-        android:layout_height="239dp"
+        android:id="@+id/titreArticle"
+        android:layout_width="235dp"
+        android:layout_height="30dp"
         android:layout_marginTop="204dp"
+        android:textAlignment="center"
+        android:textSize="22sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextArticle" />
 
@@ -36,11 +38,12 @@
         android:id="@+id/buttonTest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="508dp"
         android:text="@string/button"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textTest"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="TextContrastCheck" />
 
     <EditText
@@ -61,11 +64,10 @@
         android:id="@+id/imageView"
         android:layout_width="157dp"
         android:layout_height="155dp"
-        app:layout_constraintBottom_toTopOf="@+id/textTest"
+        app:layout_constraintBottom_toTopOf="@+id/titreArticle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextArticle"
-        app:srcCompat="@android:drawable/divider_horizontal_bright" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextArticle" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/map"
@@ -74,7 +76,28 @@
         android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
         android:clickable="true"
+        app:backgroundTint="@color/unselected_green"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@android:drawable/ic_dialog_map" />
+
+    <TextView
+        android:id="@+id/descriptionArticle"
+        android:layout_width="235dp"
+        android:layout_height="66dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titreArticle" />
+
+    <TextView
+        android:id="@+id/stockArticle"
+        android:layout_width="60dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="4dp"
+        android:textSize="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.25"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/descriptionArticle" />
 </androidx.constraintlayout.widget.ConstraintLayout>
