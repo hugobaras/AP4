@@ -26,7 +26,6 @@
         android:layout_width="237dp"
         android:layout_height="239dp"
         android:layout_marginTop="204dp"
-        android:textColor="@color/black2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -52,7 +51,6 @@
         android:hint="Article ID"
         android:inputType="textPersonName"
         android:minHeight="48dp"
-        android:textColorHint="@color/black2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
@@ -60,8 +58,8 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="157dp"
+        android:layout_height="155dp"
         app:layout_constraintBottom_toTopOf="@+id/textTest"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
