@@ -69,7 +69,7 @@ public class HomeActivity extends MainActivity {
 
 // Créer la requête JSON
         VolleyLog.DEBUG = true;
-       String url = "http://172.16.106.19/SLAM/AP3/AP3/API/getArticle.php?id=" + ArticleTest + "";
+       String url = "http://172.16.107.43/SLAM/AP3/AP3/API/getArticle.php?id=" + ArticleTest + "";
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
