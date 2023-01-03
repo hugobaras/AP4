@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
                 final String login_entry = login.getText().toString();
                 final String pwd_entry = password.getText().toString();
 
-                String url = "http://172.16.106.19/SLAM/AP3/AP3/API/connexion.php?login=" + login_entry + "&mdp=" + pwd_entry;
+                String url = "http://172.16.107.43/SLAM/AP3/AP3/API/connexion.php?login=" + login_entry + "&mdp=" + pwd_entry;
 
                JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                         response -> {
