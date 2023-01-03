@@ -104,7 +104,7 @@ public class HomeActivity extends MainActivity {
                             titre.append(nom + "\n");
                             desc.append(description + "\n");
                             slView.append(stock + " " + lieu + "\n");
-                            Log.v("nouveau test", nom+ " " + description + " " + stock + " " + lieu + "\n");
+                            Log.v("nouveau test :", nom+ " " + description + " " + stock + " " + lieu + "\n");
                             // Traiter les données
                             // ...
                         } catch (JSONException e) {
